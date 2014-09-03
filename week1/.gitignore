@@ -3,3 +3,6 @@
 
 # Generated files
 bin/
+
+.classpath
+.project
