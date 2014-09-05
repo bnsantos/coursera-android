@@ -2,6 +2,7 @@
 
 package edu.vuum.mocca;
 
+import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.locks.Lock;
 
@@ -23,13 +24,14 @@ class SimpleAtomicLong
     /**
      * The ReentrantReadWriteLock used to serialize access to mValue.
      */
-    // TODO - add the implementation
+    private ReentrantReadWriteLock readWriteLock;
 
     /**
      * Creates a new SimpleAtomicLong with the given initial value.
      */
     public SimpleAtomicLong(long initialValue) {
-        // TODO - you fill in here
+    	readWriteLock = new ReentrantReadWriteLock();
+    	mValue = initialValue;
     }
 
     /**
@@ -38,7 +40,10 @@ class SimpleAtomicLong
      * @returns The current value
      */
     public long get() {
-        // TODO - you fill in here
+    	readWriteLock.readLock().lock();
+    	long aux = mValue; 
+    	readWriteLock.readLock().unlock();
+    	return aux;
     }
 
     /**
@@ -47,7 +52,11 @@ class SimpleAtomicLong
      * @returns the updated value
      */
     public long decrementAndGet() {
-        // TODO - you fill in here
+    	readWriteLock.writeLock().lock();
+    	mValue--;
+    	long aux = mValue; 
+    	readWriteLock.writeLock().unlock();
+    	return aux;
     }
 
     /**
@@ -56,7 +65,11 @@ class SimpleAtomicLong
      * @returns the previous value
      */
     public long getAndIncrement() {
-        // TODO - you fill in here
+    	readWriteLock.writeLock().lock();
+    	long aux = mValue; 
+    	mValue++;
+    	readWriteLock.writeLock().unlock();
+    	return aux;
     }
 
     /**
@@ -65,7 +78,11 @@ class SimpleAtomicLong
      * @returns the previous value
      */
     public long getAndDecrement() {
-        // TODO - you fill in here
+    	readWriteLock.writeLock().lock();
+    	long aux = mValue; 
+    	mValue--;
+    	readWriteLock.writeLock().unlock();
+    	return aux;
     }
 
     /**
@@ -74,6 +91,10 @@ class SimpleAtomicLong
      * @returns the updated value
      */
     public long incrementAndGet() {
-        // TODO - you fill in here
+    	readWriteLock.writeLock().lock();
+    	mValue++;
+    	long aux = mValue; 
+    	readWriteLock.writeLock().unlock();
+    	return aux;
     }
 }
