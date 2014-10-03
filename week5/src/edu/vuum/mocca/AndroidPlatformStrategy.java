@@ -23,8 +23,7 @@ public class AndroidPlatformStrategy extends PlatformStrategy
     /** Activity variable finds gui widgets by view. */
     private WeakReference<Activity> mActivity;
 
-    public AndroidPlatformStrategy(Object output,
-                                   final Object activityParam)
+    public AndroidPlatformStrategy(Object output, final Object activityParam)
     {
         /**
          * A textview output which displays calculations and
@@ -36,39 +35,33 @@ public class AndroidPlatformStrategy extends PlatformStrategy
         mActivity = new WeakReference<Activity>((Activity) activityParam);
     }
 
-    /**
-     * Latch to decrement each time a thread exits to control when the
-     * play() method returns.
-     */
     private static CountDownLatch mLatch = null;
+    private Options mOptions;
 
-    /** Do any initialization needed to start a new game. */
     public void begin()
     {
-        /** (Re)initialize the CountDownLatch. */
-        // TODO - You fill in here.
+        mOptions = Options.instance();
+        mLatch = new CountDownLatch(mOptions.maxIterations());
     }
 
-    /** Print the outputString to the display. */
     public void print(final String outputString)
     {
-        /** 
-         * Create a Runnable that's posted to the UI looper thread
-         * and appends the outputString to a TextView. 
-         */
-        // TODO - You fill in here.
+        printUI(outputString);
     }
 
-    /** Indicate that a game thread has finished running. */
-    public void done()
-    {	
-        // TODO - You fill in here.
+    public void done(){
+        mLatch.countDown();
+        printUI("Done!");
     }
 
     /** Barrier that waits for all the game threads to finish. */
     public void awaitDone()
     {
-        // TODO - You fill in here.
+        try {
+            mLatch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     /** 
@@ -78,5 +71,16 @@ public class AndroidPlatformStrategy extends PlatformStrategy
     public void errorLog(String javaFile, String errorMessage) 
     {
        Log.e(javaFile, errorMessage);
+    }
+
+    private void printUI(final String string){
+        if(mActivity!=null&&mActivity.get()!=null){
+            mActivity.get().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    mTextViewOutput.setText(mTextViewOutput.getText() + "\n" + string);
+                }
+            });
+        }
     }
 }
