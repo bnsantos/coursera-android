@@ -12,6 +12,7 @@
 bin/
 gen/
 output/
+assets/
 
 # Gradle files
 .gradle/
