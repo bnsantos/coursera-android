@@ -89,14 +89,6 @@ public class ThreadPoolDownloadService extends Service {
     public int onStartCommand(final Intent intent,
                               int flags,
                               int startId) {
-        // TODO - You fill in here to replace null with a new Runnable
-        // that the ThreadPoolExecutor will execute to download the
-        // image and respond to the client.  The Runnable's run()
-        // method implementation should forward to the appropriate
-        // helper method from the DownloadUtils class that downloads
-        // the uri in the intent and returns the file's pathname using
-        // a Messenger who's Bundle key is defined by DownloadUtils.MESSENGER_KEY.
-
         Runnable downloadRunnable = new Runnable() {
             @Override
             public void run() {
