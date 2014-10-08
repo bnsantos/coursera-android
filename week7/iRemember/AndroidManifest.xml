@@ -49,15 +49,12 @@
         <activity android:name="edu.vuum.mocca.ui.EditStoryActivity" > <!-- Line 49 -->
         </activity>
         
-        <!-- THIS IS THE SOUND RECORD ACTIVITY -->
+        <!-- THIS IS THE SOUND RECORD ACTIVITY -->ord activ
         <activity
             android:name="edu.vuum.mocca.ui.SoundRecordActivity"
             android:label="@string/title_activity_sound_record"
+            android:exported="true"
             android:permission="android.permission.RECORD_AUDIO">
-            <intent-filter> 										<!-- Line 56 -->
-                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
-            </intent-filter>
-
         </activity>
         
     </application>
