@@ -68,24 +68,24 @@ public class StorageUtilities {
 			return null;
 		}
 		
-		// If security is private, store it in the app's private directory.
-		if (security == SECURITY_PRIVATE) {
-			storageDir = context.getFilesDir();
-		}
-		// Otherwise, store the file in a public directory depending on its media type.
+        if (security == SECURITY_PUBLIC) {
+            // Otherwise, store the file in a public directory depending on its media type.
+            switch (type) {
+                case MEDIA_TYPE_IMAGE:
+                    storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                    break;
+                case MEDIA_TYPE_AUDIO:
+                    storageDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
+                    break;
+                case MEDIA_TYPE_TEXT:
+                    storageDir = context.getExternalFilesDir(null);
+                    break;
+            }
+        }
 		else {	// Line 76
-			switch (type) {
-				case MEDIA_TYPE_IMAGE:
-					storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-					break;
-				case MEDIA_TYPE_AUDIO:
-					storageDir = context.getExternalFilesDir(Environment.DIRECTORY_MUSIC);
-					break;
-				case MEDIA_TYPE_TEXT:
-					storageDir = context.getExternalFilesDir(null);
-					break;
-			}
-		}
+            // If security is private, store it in the app's private directory.
+            storageDir = context.getFilesDir();
+        }
 		
 		// If a name was specified, use that filename.
 		if (name != null && storageDir != null) {
