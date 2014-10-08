@@ -379,7 +379,7 @@ public class CreateStoryActivity extends StoryActivityBase {
 	 */
 	public void setLocation(Location location) {
 		
-		Log.d(LOG_TAG, "setLocation =" + location);		// Line 382
+		//Log.d(LOG_TAG, "setLocation =" + location);		// Line 382
 		
 		loc = location;
 		double latitude = loc.getLatitude();
