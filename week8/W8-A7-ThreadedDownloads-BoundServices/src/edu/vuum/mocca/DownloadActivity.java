@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 /**
  * This is the main Activity that the program uses to start the
@@ -71,12 +72,7 @@ public class DownloadActivity extends DownloadBase {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
             	Log.d(TAG, "ComponentName: " + name);
-                // TODO You fill in here to replace null with a call
-                // to a generated stub method that converts the
-                // service parameter into an interface that can be
-                // used to make RPC calls to the Service.
-
-                mDownloadCall = null;
+                mDownloadCall = DownloadCall.Stub.asInterface(service);
             }
 
             /**
@@ -102,14 +98,8 @@ public class DownloadActivity extends DownloadBase {
              * mDownloadRequest.
              */
             @Override
-		public void onServiceConnected(ComponentName name,
-                                               IBinder service) {
-                // TODO You fill in here to replace null with a call
-                // to a generated stub method that converts the
-                // service parameter into an interface that can be
-                // used to make RPC calls to the Service.
-
-                mDownloadRequest = null;
+		public void onServiceConnected(ComponentName name, IBinder service) {
+                mDownloadRequest = DownloadRequest.Stub.asInterface(service);
             }
 
             /**
@@ -139,13 +129,13 @@ public class DownloadActivity extends DownloadBase {
              */
             @Override
             public void sendPath(final String imagePathname) throws RemoteException {
-                // TODO - You fill in here to replace null with a new
-                // Runnable whose run() method displays the bitmap
-                // image whose pathname is passed as a parameter to
-                // sendPath().  Please use displayBitmap() defined in
-                // DownloadBase.
-
-                Runnable displayRunnable = null;
+                Runnable displayRunnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        displayBitmap(imagePathname);
+                    }
+                };
+                runOnUiThread(displayRunnable);
             }
         };
      
@@ -160,14 +150,20 @@ public class DownloadActivity extends DownloadBase {
 
     	switch (view.getId()) {
         case R.id.bound_sync_button:
-            // TODO - You fill in here to use mDownloadCall to
-            // download the image & then display it.
+            try {
+                displayBitmap(getDownloadCall().downloadImage(uri));
+            } catch (RemoteException e) {
+                Toast.makeText(getApplicationContext(), "Failed to synchronously download image: " + e.getMessage(), Toast.LENGTH_LONG);
+            }
             break;
 
         case R.id.bound_async_button:
-            // TODO - You fill in here to call downloadImage() on
-            // mDownloadRequest, passing in the appropriate Uri and
-            // callback.
+            try {
+                getDownloadRequest().downloadImage(uri, getDownloadCallback());
+            } catch (RemoteException e) {
+                Toast.makeText(getApplicationContext(), "Failed to asynchronously download image: " + e.getMessage(), Toast.LENGTH_LONG);
+            }
+            startService(DownloadBoundServiceAsync.makeIntent(this));
             break;
         }
     }
