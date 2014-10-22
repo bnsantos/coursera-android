@@ -1,9 +1,0 @@
-<resources>
-
-    <string name="app_name">W8-A7-ThreadedDownloads-BoundServices</string>
-    <string name="prompt">Enter URL:</string>
-    <string name="default_url">http://lh4.ggpht.com/_S0f-AWxKVdM/SYW9WjB0JhI/AAAAAAAAGTI/CePZkqCRx-M/construction-girls%20(9)_thumb%5B1%5D.jpg?imgmax=800</string>
-    <string name="bound_sync_string">Run Synchronous Bound Service</string>
-    <string name="bound_async_string">Run Asynchronous Bound Service</string>
-    <string name="reset_image_string">Reset Image</string>
-</resources>
