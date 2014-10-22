@@ -13,8 +13,7 @@
     </content>
     <orderEntry type="jdk" jdkName="Android API 17 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="W6-A5-ThreadedDownloads-StartedServices" />
-    <orderEntry type="library" name="robotium-solo-5.1" level="project" />
+    <orderEntry type="library" name="robotium-solo-5.11" level="project" />
   </component>
 </module>
 
