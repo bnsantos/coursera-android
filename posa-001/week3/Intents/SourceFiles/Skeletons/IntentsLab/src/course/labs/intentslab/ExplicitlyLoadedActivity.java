@@ -27,32 +27,20 @@ public class ExplicitlyLoadedActivity extends Activity {
 		// Declare and setup "Enter" button
 		Button enterButton = (Button) findViewById(R.id.enter_button);
 		enterButton.setOnClickListener(new OnClickListener() {
-
 			// Call enterClicked() when pressed
-
 			@Override
 			public void onClick(View v) {
-
 				enterClicked();
-			
 			}
 		});
-
 	}
 
 	// Sets result to send back to calling Activity and finishes
-	
 	private void enterClicked() {
-
 		Log.i(TAG,"Entered enterClicked()");
-		
-		// TODO - Save user provided input from the EditText field
-
-		// TODO - Create a new intent and save the input from the EditText field as an extra
-		
-		// TODO - Set Activity's result with result code RESULT_OK
-		
-		// TODO - Finish the Activity
-
+		Intent intent = new Intent();
+        intent.putExtra(ActivityLoaderActivity.INTENT_PARAM, mEditText.getText().toString());
+        setResult(RESULT_OK, intent);
+        finish();
 	}
 }
