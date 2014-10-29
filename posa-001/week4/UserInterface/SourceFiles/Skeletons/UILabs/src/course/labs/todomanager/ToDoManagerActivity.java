@@ -46,51 +46,40 @@ public class ToDoManagerActivity extends ListActivity {
 		// Put divider between ToDoItems and FooterView
 		getListView().setFooterDividersEnabled(true);
 
-		// TODO - Inflate footerView for footer_view.xml file
+        TextView footerView = (TextView) getLayoutInflater().inflate(R.layout.footer_view, null);
 
-		TextView footerView = null;
-
-		// NOTE: You can remove this block once you've implemented the assignment
-		if (null == footerView) {
-			return;
-		}
-		// TODO - Add footerView to ListView
+        // NOTE: You can remove this block once you've implemented the assignment
+        if (null == footerView) {
+            return;
+        }
+        getListView().addFooterView(footerView);
 
 		
 		footerView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
 				Log.i(TAG,"Entered footerView.OnClickListener.onClick()");
-
-				//TODO - Implement OnClick().
+                startActivityForResult(new Intent(ToDoManagerActivity.this, AddToDoActivity.class), ADD_TODO_ITEM_REQUEST);
 			}
 		});
 
-		// TODO - Attach the adapter to this ListActivity's ListView
-		
+        setListAdapter(mAdapter);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
 		Log.i(TAG,"Entered onActivityResult()");
-
-		// TODO - Check result code and request code
-		// if user submitted a new ToDoItem
-		// Create a new ToDoItem from the data Intent
-		// and then add it to the adapter
-
+        if(resultCode==RESULT_OK&&requestCode==ADD_TODO_ITEM_REQUEST&&data!=null){
+            mAdapter.add(new ToDoItem(data));
+            mAdapter.notifyDataSetChanged();
+        }
 	}
 
 	// Do not modify below here
-
 	@Override
 	public void onResume() {
 		super.onResume();
-
 		// Load saved ToDoItems, if necessary
-
 		if (mAdapter.getCount() == 0)
 			loadItems();
 	}
@@ -98,17 +87,13 @@ public class ToDoManagerActivity extends ListActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-
 		// Save ToDoItems
-
 		saveItems();
-
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-
 		menu.add(Menu.NONE, MENU_DELETE, Menu.NONE, "Delete all");
 		menu.add(Menu.NONE, MENU_DUMP, Menu.NONE, "Dump to log");
 		return true;
@@ -129,12 +114,10 @@ public class ToDoManagerActivity extends ListActivity {
 	}
 
 	private void dump() {
-
 		for (int i = 0; i < mAdapter.getCount(); i++) {
 			String data = ((ToDoItem) mAdapter.getItem(i)).toLog();
 			Log.i(TAG,	"Item " + i + ": " + data.replace(ToDoItem.ITEM_SEP, ","));
 		}
-
 	}
 
 	// Load stored ToDoItems
@@ -179,13 +162,9 @@ public class ToDoManagerActivity extends ListActivity {
 		PrintWriter writer = null;
 		try {
 			FileOutputStream fos = openFileOutput(FILE_NAME, MODE_PRIVATE);
-			writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(
-					fos)));
-
+			writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(fos)));
 			for (int idx = 0; idx < mAdapter.getCount(); idx++) {
-
 				writer.println(mAdapter.getItem(idx));
-
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

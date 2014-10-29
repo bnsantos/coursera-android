@@ -85,33 +85,29 @@ public class AddToDoActivity extends Activity {
 		});
 
 		// OnClickListener for the Cancel Button,
-
 		final Button cancelButton = (Button) findViewById(R.id.cancelButton);
 		cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-
 				Log.i(TAG, "Entered cancelButton.OnClickListener.onClick()");
-
-				// TODO - Indicate result and finish
-
+                finish();
 			}
 		});
 
-		// TODO - Set up OnClickListener for the Reset Button
 		final Button resetButton = (Button) findViewById(R.id.resetButton);
 		resetButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Log.i(TAG, "Entered resetButton.OnClickListener.onClick()");
-
-				// TODO - Reset data to default values
-
+                mTitleText.setText("");
+                mStatusRadioGroup.check(R.id.statusNotDone);
+                mPriorityRadioGroup.check(R.id.medPriority);
+                dateView.setText(R.string.no_date_set_string);
+                timeView.setText(R.string.no_date_set_string);
 			}
 		});
 
 		// Set up OnClickListener for the Submit Button
-
 		final Button submitButton = (Button) findViewById(R.id.submitButton);
 		submitButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -119,26 +115,16 @@ public class AddToDoActivity extends Activity {
 				Log.i(TAG, "Entered submitButton.OnClickListener.onClick()");
 
 				// gather ToDoItem data
-
-				// TODO - Get the current Priority
-				Priority priority = null;
-
-				// TODO - Get the current Status
-				Status status = null;
-
-				// TODO - Get the current ToDoItem Title
-				String titleString = null;
-
-				// Construct the Date string
+				Priority priority = getPriority();
+				Status status = getStatus();
+				String titleString = getToDoTitle();
 				String fullDate = dateString + " " + timeString;
 
 				// Package ToDoItem data into an Intent
 				Intent data = new Intent();
-				ToDoItem.packageIntent(data, titleString, priority, status,
-						fullDate);
-
-				// TODO - return data Intent and finish
-
+				ToDoItem.packageIntent(data, titleString, priority, status, fullDate);
+                setResult(RESULT_OK, data);
+                finish();
 			}
 		});
 	}
@@ -166,7 +152,6 @@ public class AddToDoActivity extends Activity {
 	}
 
 	private static void setDateString(int year, int monthOfYear, int dayOfMonth) {
-
 		// Increment monthOfYear for Calendar/Date -> Time Format setting
 		monthOfYear++;
 		String mon = "" + monthOfYear;
@@ -193,7 +178,6 @@ public class AddToDoActivity extends Activity {
 	}
 
 	private Priority getPriority() {
-
 		switch (mPriorityRadioGroup.getCheckedRadioButtonId()) {
 		case R.id.lowPriority: {
 			return Priority.LOW;
@@ -208,7 +192,6 @@ public class AddToDoActivity extends Activity {
 	}
 
 	private Status getStatus() {
-
 		switch (mStatusRadioGroup.getCheckedRadioButtonId()) {
 		case R.id.statusDone: {
 			return Status.DONE;
