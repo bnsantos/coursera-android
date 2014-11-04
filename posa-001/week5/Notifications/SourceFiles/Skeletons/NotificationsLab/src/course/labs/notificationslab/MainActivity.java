@@ -80,40 +80,22 @@ public class MainActivity extends Activity implements SelectionListener {
 	// If stored Tweets are not fresh, reload them from network
 	// Otherwise, load them from file
 	private void ensureData() {
-
 		Log.i(TAG,"In ensureData(), mIsFresh:" + mIsFresh);
-
 		if (!mIsFresh) {
-
-			// TODO:
-			// Show a Toast Notification to inform user that 
-			// the app is "Downloading Tweets from Network"
-			Log.i (TAG,"Issuing Toast Message");
-
-
-			
-			
+            Log.i(TAG, "Issuing Toast Message");
+            Toast.makeText(this, R.string.downloading, Toast.LENGTH_SHORT).show();
 
 			new DownloaderTask(this).execute(URL_TSWIFT, URL_RBLACK, URL_LGAGA);
 
-			
 			// Set up a BroadcastReceiver to receive an Intent when download
 			// finishes. 
 			mRefreshReceiver = new BroadcastReceiver() {
 				@Override
 				public void onReceive(Context context, Intent intent) {
-
 					Log.i(TAG,"BroadcastIntent received in MainActivity");
-					
-					// TODO:				
-					// Check to make sure this is an ordered broadcast
-					// Let sender know that the Intent was received
-					// by setting result code to MainActivity.IS_ALIVE
-
-					
-
-
-					
+                    if(isOrderedBroadcast()){
+                        setResult(IS_ALIVE, null, null);
+                    }
 				}
 			};
 
@@ -182,30 +164,18 @@ public class MainActivity extends Activity implements SelectionListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
-		// TODO:
-		// Register the BroadcastReceiver to receive a 
-		// DATA_REFRESHED_ACTION broadcast
-
-		
-		
-		
+        if(mRefreshReceiver!=null){
+            IntentFilter intentFilter = new IntentFilter(DATA_REFRESHED_ACTION);
+            registerReceiver(mRefreshReceiver, intentFilter);
+        }
 	}
 
 	@Override
 	protected void onPause() {
-
-		// TODO:
-		// Unregister the BroadcastReceiver if it has been registered
-        // Note: To work around a Robotium issue - check that the BroadcastReceiver
-        // is not null before you try to unregister it
-        
-
-		
-		
-		
+        if(mRefreshReceiver!=null){
+            unregisterReceiver(mRefreshReceiver);
+        }
 		super.onPause();
-
 	}
 
 	// Convert raw Tweet data (in JSON format) into text for display
